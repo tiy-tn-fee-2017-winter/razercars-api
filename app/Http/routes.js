@@ -22,6 +22,12 @@ Route.on('/').render('welcome');
 Route.group('collection', () => {
   Route.resource('/cars', 'CarController')
     .except(['create', 'edit']);
+
   Route.resource('/brands', 'BrandController')
+    .except(['create', 'edit']);
+
+  Route.resource('/basic/brands', 'BasicBrandController')
+    .except(['create', 'edit']);
+  Route.resource('/basic/cars', 'BasicCarController')
     .except(['create', 'edit']);
 }).prefix('/:collection');
