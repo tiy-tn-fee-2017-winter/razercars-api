@@ -7,25 +7,25 @@ class BasicCarController {
 
   * index(request, response) {
     const collection = request.param('collection');
-    const basicCars = yield Car.with('brand').where({ collection }).fetch();
+    const cars = yield Car.with('brand').where({ collection }).fetch();
 
-    response.send(basicCars);
+    response.send(cars);
   }
 
   * store(request, response) {
     const input = request.only(attributes);
     input.collection = request.param('collection');
-    const basicCar = yield Car.create(input);
+    const car = yield Car.create(input);
 
-    response.send(basicCar);
+    response.send(car);
   }
 
   * show(request, response) {
     const id = request.param('id');
     const collection = request.param('collection');
-    const basicCar = yield Car.with('brand').where({ id, collection }).firstOrFail();
+    const car = yield Car.with('brand').where({ id, collection }).firstOrFail();
 
-    response.send(basicCar);
+    response.send(car);
   }
 
   * update(request, response) {
@@ -33,18 +33,18 @@ class BasicCarController {
     const input = request.only(attributes);
     const id = request.param('id');
 
-    const basicCar = yield Car.with('brand').where({ id, collection }).firstOrFail();
-    basicCar.fill(input);
-    yield basicCar.save(input);
+    const car = yield Car.with('brand').where({ id, collection }).firstOrFail();
+    car.fill(input);
+    yield car.save(input);
 
-    response.send(basicCar);
+    response.send(car);
   }
 
   * destroy(request, response) {
     const collection = request.param('collection');
     const id = request.param('id');
-    const basicCar = yield Car.query().where({ id, collection }).firstOrFail();
-    yield basicCar.delete();
+    const car = yield Car.query().where({ id, collection }).firstOrFail();
+    yield car.delete();
 
     response.status(204).send();
   }
