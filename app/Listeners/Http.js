@@ -3,6 +3,7 @@
 const Env = use('Env');
 const Youch = use('youch');
 const Http = exports = module.exports = {};
+const { JsonApiRequest, JsonApiError, ValidationError } = require('adonis-jsonapi/src/JsonApiRequest');
 
 /**
  * handle errors occured during a Http request.
@@ -17,7 +18,7 @@ Http.handleError = function* (error, request, response) {
   /**
    * DEVELOPMENT REPORTER
    */
-  if (Env.get('NODE_ENV') === 'development') {
+  if (Env.get('NODE_ENV') === 'development' && !(error instanceof JsonApiError)) {
     const youch = new Youch(error, request.request);
     const type = request.accepts('json', 'html');
     const formatMethod = type === 'json' ? 'toJSON' : 'toHTML';
@@ -27,11 +28,7 @@ Http.handleError = function* (error, request, response) {
     return;
   }
 
-  /**
-   * PRODUCTION REPORTER
-   */
-  console.error(error.stack);
-  yield response.status(status).sendView('errors/index', { error });
+  yield response.jsonApiError(error);
 };
 
 /**
